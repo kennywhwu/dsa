@@ -64,6 +64,112 @@ class DoublyLinkedList {
     this.length--;
     return removedNode;
   }
+
+  shift() {
+    if (!this.head) {
+      return;
+    }
+    let removedNode = this.head;
+    if (this.length === 1) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.head = this.head.next;
+      this.head.prev = null;
+    }
+    removedNode.next = null;
+    this.length--;
+    return removedNode;
+  }
+
+  unshift(val) {
+    if (!this.head) {
+      this.push(val);
+      return this;
+    }
+    let newNode = new Node(val);
+    newNode.next = this.head;
+    this.head.prev = newNode;
+    this.head = newNode;
+    this.length++;
+    return this;
+  }
+
+  get(index) {
+    if (index < 0 || index >= this.length) {
+      return;
+    }
+    let counter = index;
+    let current;
+    if (index <= this.length / 2) {
+      current = this.head;
+      for (let i = 0; i < index; i++) {
+        current = current.next;
+      }
+    } else {
+      current = this.tail;
+      for (let i = this.length - 1; i > index; i--) {
+        current = current.prev;
+      }
+    }
+    return current;
+  }
+
+  set(index, val) {
+    let current = this.get(index);
+    if (current) {
+      current.val = val;
+      return true;
+    }
+    return false;
+  }
+
+  insert(index, val) {
+    if (index < 0 || index > this.length) {
+      return false;
+    }
+    if (index === 0) {
+      this.unshift(val);
+      return true;
+    }
+    if (index === this.length) {
+      this.push(val);
+      return true;
+    }
+    let current = this.get(index - 1);
+    if (current.next) {
+      let newNode = new Node(val);
+      let next = current.next;
+      newNode.next = next;
+      newNode.prev = current;
+      next.prev = newNode;
+      current.next = newNode;
+      this.length++;
+      return true;
+    }
+    return false;
+  }
+
+  remove(index) {
+    if (index < 0 || index >= this.length) {
+      return;
+    }
+    if (index === 0) {
+      return this.shift();
+    }
+    if (index === this.length - 1) {
+      return this.pop();
+    }
+    let removedNode = this.get(index);
+    let prev = removedNode.prev;
+    let next = removedNode.next;
+    prev.next = next;
+    next.prev = prev;
+    removedNode.prev = null;
+    removedNode.next = null;
+    this.length--;
+    return removedNode;
+  }
 }
 
 let list = new DoublyLinkedList();

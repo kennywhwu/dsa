@@ -132,18 +132,21 @@ class SinglyLinkedList {
     if (this.length <= 1) {
       return this;
     }
-    let temp = this.head;
+
+    let current = this.head;
     this.head = this.tail;
-    this.tail = temp;
-    let prev = this.tail.next.next;
-    let next = this.tail;
-    let node = this.tail.next;
-    while (node) {
-      next = node.next;
-      node.next = prev;
-      prev = node.val;
-      node.val = next;
+    this.tail = current;
+
+    let next;
+    let prev = null;
+
+    while (current) {
+      next = current.next;
+      current.next = prev;
+      prev = current;
+      current = next;
     }
+
     return this;
   }
 }
