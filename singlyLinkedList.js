@@ -14,6 +14,19 @@ class SinglyLinkedList {
     this.length = 0;
   }
 
+  print() {
+    if (this.length === 0) {
+      console.log(undefined);
+    }
+    let current = this.head;
+    let printArray = [];
+    while (current) {
+      printArray.push(current.val);
+      current = current.next;
+    }
+    console.log(printArray);
+  }
+
   push(val) {
     let newNode = new Node(val);
     if (this.head) {
@@ -90,9 +103,8 @@ class SinglyLinkedList {
     if (current) {
       current.val = val;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   insert(index, val) {
@@ -149,11 +161,83 @@ class SinglyLinkedList {
 
     return this;
   }
+
+  average() {
+    if (this.length === 0) {
+      return;
+    }
+    let current = this.head;
+    let currentSum = 0;
+    while (current) {
+      currentSum += current.val;
+      current = current.next;
+    }
+    return currentSum / this.length;
+  }
+
+  // Move all nodes where value is higher than passed in value to the right side of the list
+  // Preserve the order of numbers for left and right sides separately
+  pivot(val) {
+    if (this.length <= 1) {
+      return this;
+    }
+    let current = this.head;
+    let prev = null;
+    let next;
+    for (let i = 0; i < this.length; i++) {
+      next = current.next;
+      if (current.val >= val) {
+        if (current === this.head) {
+          this.head = next;
+        } else {
+          prev.next = next;
+        }
+        this.tail.next = current;
+        this.tail = current;
+        this.tail.next = null;
+      } else {
+        prev = current;
+      }
+      current = next;
+    }
+    return this;
+  }
+}
+
+// Merge two sorted lists into new sorted Linked List
+function sortLL(list1, list2) {
+  let sortedList = new SinglyLinkedList();
+  while (list1.length > 0 && list2.length > 0) {
+    if (list1.head.val >= list2.head.val) {
+      sortedList.push(list2.shift().val);
+    } else {
+      sortedList.push(list1.shift().val);
+    }
+  }
+  if (list1.length > 0) {
+    sortedList.tail.next = list1.head;
+  } else {
+    sortedList.tail.next = list2.head;
+  }
+  return sortedList;
 }
 
 let list = new SinglyLinkedList();
-list.push(0);
-list.push(1);
+list.push(7);
+list.push(6);
 list.push(2);
 list.push(3);
-list.push(4);
+list.push(9);
+list.push(1);
+list.push(1);
+
+let list1 = new SinglyLinkedList();
+list1.push(1);
+list1.push(5);
+list1.push(8);
+list1.push(9);
+
+let list2 = new SinglyLinkedList();
+list2.push(2);
+list2.push(7);
+list2.push(10);
