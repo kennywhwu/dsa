@@ -29,25 +29,6 @@ class DoublyLinkedList {
     return this;
   }
 
-  popa() {
-    if (this.length <= 1) {
-      this.head = null;
-      this.tail = null;
-      this.length = 0;
-      return;
-    }
-    let removedNode = this.tail;
-    if (this.length === 2) {
-      this.head.next = null;
-      this.tail = this.head;
-    } else {
-      this.tail = this.tail.prev;
-      this.tail.next = null;
-    }
-    this.length--;
-    return removedNode;
-  }
-
   pop() {
     if (!this.head) {
       return;
