@@ -108,11 +108,11 @@ class SinglyLinkedList {
   }
 
   insert(index, val) {
-    if (index < 0 || index >= this.length) {
+    if (index < 0 || index > this.length) {
       return false;
     } else if (index === 0) {
       return !!this.unshift(val);
-    } else if (index === this.length - 1) {
+    } else if (index === this.length) {
       return !!this.push(val);
     } else {
       let current = this.get(index - 1);
@@ -125,11 +125,11 @@ class SinglyLinkedList {
   }
 
   remove(index) {
-    if (index < 0 || index >= this.length) {
+    if (index < 0 || index > this.length) {
       return undefined;
     } else if (index === 0) {
       return this.shift();
-    } else if (index === this.length - 1) {
+    } else if (index === this.length) {
       return this.pop();
     } else {
       let current = this.get(index - 1);
