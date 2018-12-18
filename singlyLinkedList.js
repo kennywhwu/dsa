@@ -162,6 +162,21 @@ class SinglyLinkedList {
     return this;
   }
 
+  reverse_short() {
+    let next,
+      prev = null,
+      cur = this.head;
+
+    while (cur) {
+      next = cur.next;
+      cur.next = prev;
+      prev = cur;
+      cur = next;
+    }
+
+    this.head = prev;
+  }
+
   average() {
     if (this.length === 0) {
       return;
