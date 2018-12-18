@@ -21,13 +21,13 @@ class SinglyLinkedList {
     let current = this.head;
     let printArray = [];
     while (current) {
-      printArray.push(current.val);
+      printArray.append(current.val);
       current = current.next;
     }
     console.log(printArray);
   }
 
-  push(val) {
+  append(val) {
     let newNode = new Node(val);
     if (this.head) {
       this.tail.next = newNode;
@@ -58,7 +58,7 @@ class SinglyLinkedList {
       this.head = null;
       this.tail = null;
     }
-    return current;
+    return current.val;
   }
 
   shift() {
@@ -98,7 +98,7 @@ class SinglyLinkedList {
     return current;
   }
 
-  set(index, val) {
+  setAt(index, val) {
     let current = this.get(index);
     if (current) {
       current.val = val;
@@ -107,13 +107,13 @@ class SinglyLinkedList {
     return false;
   }
 
-  insert(index, val) {
-    if (index < 0 || index >= this.length) {
+  insertAt(index, val) {
+    if (index < 0 || index > this.length) {
       return false;
     } else if (index === 0) {
       return !!this.unshift(val);
-    } else if (index === this.length - 1) {
-      return !!this.push(val);
+    } else if (index === this.length) {
+      return !!this.append(val);
     } else {
       let current = this.get(index - 1);
       let newNode = new Node(val);
@@ -124,19 +124,19 @@ class SinglyLinkedList {
     }
   }
 
-  remove(index) {
-    if (index < 0 || index >= this.length) {
+  removeAt(index) {
+    if (index < 0 || index > this.length) {
       return undefined;
     } else if (index === 0) {
       return this.shift();
-    } else if (index === this.length - 1) {
+    } else if (index === this.length) {
       return this.pop();
     } else {
       let current = this.get(index - 1);
       let removedNode = current.next;
       current.next = current.next.next;
       this.length--;
-      return removedNode;
+      return removedNode.val;
     }
   }
 
@@ -217,6 +217,28 @@ class SinglyLinkedList {
     }
     return this;
   }
+
+  rotate(val) {
+    this.tail.next = this.head;
+    if (this.length <= 1) {
+      return this;
+    }
+    let newHead = this.head;
+    let newTail = this.tail;
+
+    let shift =
+      val >= 0 ? val % this.length : this.length + (val % this.length);
+
+    for (let i = 0; i < shift; i++) {
+      newHead = newHead.next;
+      newTail = newTail.next;
+    }
+
+    this.head = newHead;
+    this.tail = newTail;
+    this.tail.next = null;
+    return this;
+  }
 }
 
 // Merge two sorted lists into new sorted Linked List
@@ -224,9 +246,9 @@ function sortLL(list1, list2) {
   let sortedList = new SinglyLinkedList();
   while (list1.length > 0 && list2.length > 0) {
     if (list1.head.val >= list2.head.val) {
-      sortedList.push(list2.shift().val);
+      sortedList.append(list2.shift().val);
     } else {
-      sortedList.push(list1.shift().val);
+      sortedList.append(list1.shift().val);
     }
   }
   if (list1.length > 0) {
@@ -238,21 +260,23 @@ function sortLL(list1, list2) {
 }
 
 let list = new SinglyLinkedList();
-list.push(7);
-list.push(6);
-list.push(2);
-list.push(3);
-list.push(9);
-list.push(1);
-list.push(1);
+list.append(7);
+list.append(6);
+list.append(2);
+list.append(3);
+list.append(9);
+list.append(1);
+list.append(1);
 
 let list1 = new SinglyLinkedList();
-list1.push(1);
-list1.push(5);
-list1.push(8);
-list1.push(9);
+list1.append(1);
+list1.append(5);
+list1.append(8);
+list1.append(9);
 
 let list2 = new SinglyLinkedList();
-list2.push(2);
-list2.push(7);
-list2.push(10);
+list2.append(2);
+list2.append(7);
+list2.append(10);
+
+module.exports = SinglyLinkedList;

@@ -1,5 +1,5 @@
-// List made up of nodes with LIFO model
-// Push and pop applied to beginning for constant runtime
+// Return reverse of passed in string
+// 'hello' --> 'olleh'
 
 class Node {
   constructor(val) {
@@ -29,6 +29,7 @@ class Stack {
 
   pop() {
     if (this.size === 0) {
+      //       throw new Error(`Nothing in stack`);
       return;
     }
     let removedNode = this.first;
@@ -40,6 +41,26 @@ class Stack {
     this.size--;
     return removedNode;
   }
+
+  peek() {
+    return this.first;
+  }
+
+  isEmpty() {
+    return this.size ? false : true;
+  }
 }
 
-let stack = new Stack();
+function reverseString(str) {
+  let revStr = '';
+  let strStack = new Stack();
+  for (let i = 0; i < str.length; i++) {
+    strStack.push(str[i]);
+  }
+  while (strStack.first) {
+    revStr += strStack.pop().val;
+  }
+  return revStr;
+}
+
+module.exports = reverseString;

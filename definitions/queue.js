@@ -28,17 +28,24 @@ class Queue {
 
   dequeue() {
     if (this.size === 0) {
-      return;
+      throw new Error(`Nothing in queue`);
     }
     let removedNode = this.first;
     if (this.size === 1) {
-      this.first = null;
       this.last = null;
     }
     this.first = removedNode.next;
     removedNode.next = null;
     this.size--;
     return removedNode;
+  }
+
+  peek() {
+    return this.first;
+  }
+
+  isEmpty() {
+    return this.size ? false : true;
   }
 }
 
