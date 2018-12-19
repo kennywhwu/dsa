@@ -7,6 +7,9 @@ const {
   findIndex,
   gatherStrings,
   binarySearch,
+  realSize,
+  sumSquares,
+  replicate,
 } = require('./recursion-exercises');
 
 describe('revString', function() {
@@ -110,5 +113,42 @@ describe('binarySearch', function() {
     expect(binarySearch([1, 2, 3, 4], 5)).toBe(-1);
     expect(binarySearch([1, 4, 8, 10, 14, 17, 20, 25, 30], 25)).toBe(7);
     expect(binarySearch([1, 4, 8, 10, 14, 17, 20, 25, 30], 26)).toBe(-1);
+  });
+});
+
+describe('realSize', function() {
+  it('returns count of numbers in nested arrays', function() {
+    expect(realSize([])).toBe(0);
+    expect(realSize([1])).toBe(1);
+    expect(realSize([[]])).toBe(0);
+    expect(realSize([1, [1]])).toBe(2);
+    expect(realSize([1, [], 2, [], 3, []])).toBe(3);
+    expect(realSize([0, [1, [5, [4, 3], 1], 1]])).toBe(7);
+    expect(realSize([[[5], 3], 0, 2, [], [4, [5, 6]]])).toBe(7);
+  });
+});
+
+describe('sumSquares', function() {
+  it('returns sum of squares of numbers in nested array', function() {
+    expect(sumSquares([])).toBe(0);
+    expect(sumSquares([1])).toBe(1);
+    expect(sumSquares([[]])).toBe(0);
+    expect(sumSquares([1, 2, 3])).toBe(14);
+    expect(sumSquares([[1, 2], 3])).toBe(14);
+    expect(sumSquares([[[[[[[[[1]]]]]]]]])).toBe(1);
+    expect(sumSquares([10, [[10], 10], [10]])).toBe(400);
+    expect(sumSquares([1, [[3], 10, 5, [2, [3], [4], [5, [6]]]], [10]])).toBe(
+      325
+    );
+  });
+});
+
+describe('replicate', function() {
+  it('returns array of numbers listed passed-in number of times', function() {
+    expect(replicate(0, 0)).toEqual([]);
+    expect(replicate(5, 1)).toEqual([1, 1, 1, 1, 1]);
+    expect(replicate(0, 12)).toEqual([]);
+    expect(replicate(-1, 12)).toEqual([]);
+    expect(replicate(8, 0)).toEqual([0, 0, 0, 0, 0, 0, 0, 0]);
   });
 });

@@ -114,6 +114,50 @@ function binarySearch(nums, target) {
   return _binarySearch(nums, target);
 }
 
+// Return count of numbers in nested arrays (from Codewars)
+function realSize(arrays) {
+  let numCount = 0;
+  function _realSize(arrays) {
+    for (let i = 0; i < arrays.length; i++) {
+      if (Array.isArray(arrays[i])) {
+        _realSize(arrays[i]);
+      } else {
+        numCount++;
+      }
+    }
+  }
+  _realSize(arrays);
+  return numCount;
+}
+
+// Return sum of squares for all numbers in nested arrays (from Codewars)
+function sumSquares(l) {
+  let sum = 0;
+  function _sumSquares(l) {
+    for (let i = 0; i < l.length; i++) {
+      if (Array.isArray(l[i])) {
+        _sumSquares(l[i]);
+      } else {
+        sum += l[i] * l[i];
+      }
+    }
+  }
+  _sumSquares(l);
+  return sum;
+}
+
+// Return array with number listed out passed-in times (from Codewars)
+function replicate(times, number) {
+  function _replicate(times, number, output = []) {
+    if (times <= 0) {
+      return output;
+    }
+    output.push(number);
+    return _replicate(--times, number, output);
+  }
+  return _replicate(times, number);
+}
+
 module.exports = {
   revString,
   product,
@@ -123,4 +167,7 @@ module.exports = {
   findIndex,
   gatherStrings,
   binarySearch,
+  realSize,
+  sumSquares,
+  replicate,
 };
