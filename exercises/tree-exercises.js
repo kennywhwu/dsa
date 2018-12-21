@@ -243,29 +243,26 @@ class BinaryTree {
     let path1 = [];
     let path2 = [];
 
-    let found;
     function _traverse(target, node, path) {
+      if (!node) return;
       path.push(node.val);
       if (target.val === node.val) {
-        found = true;
-        return;
+        return true;
       }
-      if (node.left && !found) _traverse(target, node.left, path);
-      if (node.right && !found) _traverse(target, node.right, path);
-      if (!found) {
-        path.pop();
-      } else {
-        return;
-      }
+      if (_traverse(target, node.left, path)) return true;
+      if (_traverse(target, node.right, path)) return true;
+      path.pop();
     }
     _traverse(node1, this.root, path1);
-    found = false;
     _traverse(node2, this.root, path2);
 
     for (let i = 0; i < path1.length; i++) {
       if (path1[i] !== path2[i]) return path1[i - 1];
     }
-    return Math.min(path1.length, path2.length) - 1;
+
+    return path1.length < path2.length
+      ? path1[path1.length - 1]
+      : path2[path2.length - 1];
   }
 }
 
