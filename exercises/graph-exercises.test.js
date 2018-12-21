@@ -1,4 +1,11 @@
-const { Graph, Node, shortestPath, canFinish } = require('./graph-exercises');
+const {
+  Graph,
+  Node,
+  shortestPath,
+  canFinish,
+  numIslands,
+  shortestReach,
+} = require('./graph-exercises');
 
 let graph = new Graph();
 let S = new Node('S');
@@ -161,9 +168,9 @@ describe('shortestPath ', function() {
 });
 
 describe('canFinish', function() {
-  it('should_return_an_array_of_the_nodes_searched_using_BFS', function() {
-    // expect(canFinish(2, [['A', 'B'], ['A', 'C']])).toEqual(true);
-    // expect(canFinish(2, [['A', 'B'], ['B', 'A']])).toEqual(false);
+  it('should_return_true_if_no_cycles_in_graph', function() {
+    expect(canFinish(2, [['A', 'B'], ['A', 'C']])).toEqual(true);
+    expect(canFinish(2, [['A', 'B'], ['B', 'A']])).toEqual(false);
     expect(
       canFinish(5, [
         ['A', 'B'],
@@ -174,48 +181,187 @@ describe('canFinish', function() {
         ['C', 'E'],
       ])
     ).toEqual(false);
-    // expect(
-    //   canFinish(5, [['A', 'B'], ['A', 'C'], ['C', 'D'], ['D', 'B'], ['C', 'E']])
-    // ).toEqual(true);
-    // expect(canFinish(2, [[0, 1], [1, 0]])).toEqual(false);
+    expect(
+      canFinish(5, [['A', 'B'], ['A', 'C'], ['C', 'D'], ['D', 'B'], ['C', 'E']])
+    ).toEqual(true);
+    expect(canFinish(2, [[0, 1], [1, 0]])).toEqual(false);
   });
 });
 
-// // describe('hasCycle', function () {
-// //   it('should determine if there is a cycle', function () {
-// //     let g = new Graph()
-// //     g.addVertex(0)
-// //     g.addVertex(1)
-// //     g.addVertex(2)
-// //     g.addVertex(3)
-// //     expect(g.hasCycle()).toBe(false)
-// //     g.addEdge(0, 1)
-// //     expect(g.hasCycle()).toBe(true)
-// //     g.addEdge(0, 2)
-// //     expect(g.hasCycle()).toBe(true)
-// //     g.addEdge(0, 3)
-// //     expect(g.hasCycle()).toBe(true)
-// //     g.addEdge(2, 0)
-// //     expect(g.hasCycle()).toBe(true)
-// //     g.addEdge(2, 1)
-// //     expect(g.hasCycle()).toBe(true)
-// //     g.addEdge(1, 3)
-// //     expect(g.hasCycle()).toBe(true)
-// //   });
-// //   it('should determine if there is a cycle', function () {
-// //     let g = new Graph()
-// //     g.addVertex('A')
-// //     g.addVertex('B')
-// //     g.addVertex('C')
-// //     g.addVertex('D')
-// //     g.addVertex('E')
-// //     g.addEdge('A', 'B')
-// //     g.addEdge('D', 'E')
-// //     g.addEdge('C', 'E')
-// //     g.addEdge('A', 'D')
-// //     g.addEdge('A', 'C')
-// //     g.addEdge('E', 'B')
-// //     g.addEdge('D', 'B')
-// //     expect(g.hasCycle()).toBe(true)
-// //   });
+// describe('findOrder', function() {
+//   it('should_return_path_to_complete_courses_with_prerequisites', function() {
+//     expect(findOrder(2, [['A', 'B'], ['A', 'C']])).toEqual(['A']);
+//     expect(findOrder(2, [['A', 'B'], ['B', 'A']])).toEqual(false);
+//     expect(
+//       findOrder(5, [
+//         ['A', 'B'],
+//         ['A', 'C'],
+//         ['C', 'D'],
+//         ['D', 'B'],
+//         ['E', 'A'],
+//         ['C', 'E'],
+//       ])
+//     ).toEqual(false);
+//     expect(
+//       findOrder(5, [['A', 'B'], ['A', 'C'], ['C', 'D'], ['D', 'B'], ['C', 'E']])
+//     ).toEqual(true);
+//     expect(findOrder(2, [[0, 1], [1, 0]])).toEqual(false);
+//   });
+// });
+
+describe('numIslands', function() {
+  let a = [[1, 1, 0, 0, 0], [1, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 1]];
+  let b = [[1, 1, 1], [0, 1, 0], [1, 1, 1]];
+  let c = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  let d = [[1, 1, 1], [0, 1, 0], [1, 0, 1]];
+  let e = [
+    ['1', '1', '1', '1', '0'],
+    ['1', '1', '0', '1', '0'],
+    ['1', '1', '0', '0', '0'],
+    ['0', '0', '0', '0', '0'],
+  ];
+  it('should_return_number_of_islands_in_grid_represented_with_1', function() {
+    expect(numIslands(a)).toEqual(3);
+    expect(numIslands(b)).toEqual(1);
+    expect(numIslands(c)).toEqual(3);
+    expect(numIslands(d)).toEqual(3);
+    expect(numIslands(e)).toEqual(1);
+  });
+});
+
+describe('hasCycle', function() {
+  it('should determine if there is a cycle', function() {
+    let g = new Graph();
+    let A = new Node('A');
+    let B = new Node('B');
+    let C = new Node('C');
+    let D = new Node('D');
+
+    g.addVertex(A);
+    g.addVertex(B);
+    g.addVertex(C);
+    g.addVertex(D);
+    expect(g.hasCycle()).toBe(false);
+    g.addEdge(A, B);
+    expect(g.hasCycle()).toBe(true);
+    g.addEdge(A, C);
+    expect(g.hasCycle()).toBe(true);
+    g.addEdge(A, D);
+    expect(g.hasCycle()).toBe(true);
+    g.addEdge(C, A);
+    expect(g.hasCycle()).toBe(true);
+    g.addEdge(C, B);
+    expect(g.hasCycle()).toBe(true);
+    g.addEdge(B, D);
+    expect(g.hasCycle()).toBe(true);
+  });
+  it('should determine if there is a cycle (v2)', function() {
+    let g = new Graph();
+    let A = new Node('A');
+    let B = new Node('B');
+    let C = new Node('C');
+    let D = new Node('D');
+    let E = new Node('E');
+
+    g.addVertex(A);
+    g.addVertex(B);
+    g.addVertex(C);
+    g.addVertex(D);
+    g.addVertex(E);
+    g.addEdge(A, B);
+    g.addEdge(D, E);
+    g.addEdge(C, E);
+    g.addEdge(A, D);
+    g.addEdge(A, C);
+    g.addEdge(E, B);
+    g.addEdge(D, B);
+    expect(g.hasCycle()).toBe(true);
+  });
+});
+
+describe('pathStartToTarget', function() {
+  it('should_return_all_paths_from_start_to_target_through_DFS', function() {
+    let g = new Graph();
+    let A = new Node('A');
+    let B = new Node('B');
+    let C = new Node('C');
+    let D = new Node('D');
+    let E = new Node('E');
+
+    g.addVertex(A);
+    g.addVertex(B);
+    g.addVertex(C);
+    g.addVertex(D);
+    g.addVertex(E);
+    g.addEdge(A, B);
+    g.addEdge(D, E);
+    g.addEdge(C, E);
+    g.addEdge(A, D);
+    g.addEdge(A, C);
+    g.addEdge(E, B);
+    g.addEdge(D, B);
+
+    let result1 = g
+      .pathsDFS(A, E)
+      .map(arr => JSON.stringify(arr))
+      .sort();
+    let test1 = [
+      ['A', 'B', 'E'],
+      ['A', 'C', 'E'],
+      ['A', 'D', 'E'],
+      ['A', 'B', 'D', 'E'],
+      ['A', 'D', 'B', 'E'],
+    ]
+      .map(arr => JSON.stringify(arr))
+      .sort();
+    expect(result1.sort()).toEqual(test1.sort());
+  });
+
+  it('should_return_all_paths_from_start_to_target_through_BFS', function() {
+    let g = new Graph();
+    let A = new Node('A');
+    let B = new Node('B');
+    let C = new Node('C');
+    let D = new Node('D');
+    let E = new Node('E');
+    let F = new Node('F');
+
+    g.addVertex(A);
+    g.addVertex(B);
+    g.addVertex(C);
+    g.addVertex(D);
+    g.addVertex(E);
+    g.addVertex(F);
+    g.addEdge(A, B);
+    g.addEdge(D, E);
+    g.addEdge(C, E);
+    g.addEdge(A, D);
+    g.addEdge(A, C);
+    g.addEdge(E, B);
+    g.addEdge(D, B);
+    g.addEdge(E, F);
+
+    expect(g.pathsBFS(A, B)).toEqual([['A', 'B']]);
+
+    let result1 = g
+      .pathsBFS(A, F)
+      .map(arr => JSON.stringify(arr))
+      .sort();
+    let test1 = [
+      ['A', 'B', 'E', 'F'],
+      ['A', 'C', 'E', 'F'],
+      ['A', 'D', 'E', 'F'],
+    ]
+      .map(arr => JSON.stringify(arr))
+      .sort();
+    expect(result1.sort()).toEqual(test1.sort());
+  });
+});
+
+// describe('shortestReach', function() {
+//   it('should_return_array_of_shortest_distances_from_start_to_all_other_nodes', function() {
+//     // expect(shortestReach(3, 2, [[1, 2], [1, 3]], 1)).toEqual([6, 6]);
+//     expect(shortestReach(4, 2, [[1, 2], [1, 3]], 1)).toEqual([6, 6, -1]);
+//     // expect(shortestReach(3, 1, [[2, 3]], 2)).toEqual([-1, 6]);
+//   });
 // });

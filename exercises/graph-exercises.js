@@ -96,6 +96,79 @@ class Graph {
     }
     return output;
   }
+
+  // return array of all paths from start to target node using DFS
+  pathsDFS(start, target) {
+    let paths = [];
+    let path = [start.value];
+    let visited = new Set();
+
+    function _DFS(node, target) {
+      if (node === target) {
+        paths.push([...path]);
+        return;
+      }
+      visited.add(node);
+      node.adjacent.forEach(v => {
+        if (!visited.has(v)) {
+          path.push(v.value);
+          _DFS(v, target);
+          path.pop();
+        }
+      });
+      visited.delete(node);
+    }
+
+    _DFS(start, target);
+    return paths;
+  }
+
+  // return array of all paths from start to target node using BFS (will always be shortest path(s))
+  pathsBFS(start, target) {
+    let paths = [];
+    let path = [start.value];
+    let visited = new Set();
+    let queue = [[start]];
+    let current;
+    while (queue.length) {
+      let currentPath = queue.shift();
+      let currentNode = currentPath[currentPath.length - 1];
+      if (currentNode === target) {
+        paths.push(currentPath.map(node => node.value));
+      }
+      visited.add(currentNode);
+      currentNode.adjacent.forEach(v => {
+        if (!visited.has(v)) {
+          queue.push([...currentPath, v]);
+        }
+      });
+    }
+    return paths;
+  }
+
+  // Return true if any cycle in graph, else return false
+  hasCycle() {
+    let output = false;
+    for (let start of this.nodes) {
+      if (!output) {
+        let current = start;
+        let visited = new Set();
+        function _hasCycle(current, start) {
+          if (!current) return;
+          visited.add(current);
+          current.adjacent.forEach(v => {
+            if (v === start) {
+              output = true;
+              return;
+            }
+            if (!visited.has(v)) _hasCycle(v, start);
+          });
+        }
+        _hasCycle(current, start);
+      }
+    }
+    return output;
+  }
 }
 
 // Return array of shortest path between start and target vertices in graph (ie lowest number)
@@ -128,7 +201,7 @@ function shortestPath(graph, start, target) {
   return path;
 }
 
-// Return true if no cycles in graph, else return false
+// Return true if no cycles in graph, else return false (from LeetCode)
 function canFinish(numCourses, prerequisites) {
   let obj = {};
   for (let i = 0; i < prerequisites.length; i++) {
@@ -162,4 +235,117 @@ function canFinish(numCourses, prerequisites) {
   return output;
 }
 
-module.exports = { Graph, Node, shortestPath, canFinish };
+// Return true if no cycles in graph, else return false (from LeetCode)
+function findOrder(numCourses, prerequisites) {
+  let obj = {};
+  for (let i = 0; i < prerequisites.length; i++) {
+    if (obj[prerequisites[i][0]]) {
+      obj[prerequisites[i][0]].push(prerequisites[i][1].toString());
+    } else {
+      obj[prerequisites[i][0]] = [prerequisites[i][1].toString()];
+    }
+  }
+  let visited = new Set();
+  let cycle = true;
+
+  function _hasCycle(node, key, path) {
+    if (!node) return;
+    visited.add(node);
+    path.push(node);
+    if (!obj[node]) return;
+    obj[node].forEach(v => {
+      if (v === key) {
+        // cycle = false;
+        return false;
+      }
+      if (!visited.has(v)) _hasCycle(v, key, path);
+    });
+  }
+
+  for (let key in obj) {
+    if (cycle) {
+      let path = [];
+      if (!_hasCycle(key, key, path)) return false;
+      if (path.length === numCourses) return true;
+      visited = new Set();
+    }
+  }
+}
+
+// Return number of islands in passed in grid (from LeetCode)
+function numIslands(grid) {
+  let count = 0;
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      if (+grid[i][j] === 1) {
+        numIslandsDFS(grid, i, j);
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
+function numIslandsDFS(grid, i, j) {
+  if (
+    !grid ||
+    i < 0 ||
+    j < 0 ||
+    i >= grid.length ||
+    j >= grid[0].length ||
+    +grid[i][j] !== 1
+  )
+    return;
+  grid[i][j] = 0;
+  numIslandsDFS(grid, i - 1, j);
+  numIslandsDFS(grid, i + 1, j);
+  numIslandsDFS(grid, i, j - 1);
+  numIslandsDFS(grid, i, j + 1);
+}
+
+function shortestReach(nodeCount, edgeCount, edges, start) {
+  let adjList = {};
+  // initiate adjacency list with nodes
+  for (let i = 1; i <= nodeCount; i++) {
+    adjList[i] = [];
+  }
+  // add edges to nodes adjacency list
+  edges.forEach(edge => {
+    adjList[edge[0]].push(edge[1]);
+    adjList[edge[1]].push(edge[0]);
+  });
+
+  // bfs traversal
+  let output = [];
+  for (let i = 1; i <= nodeCount; i++) {
+    if (i !== start) {
+      let queue = [start];
+      let distance = 0;
+      let visited = new Set();
+      while (queue.length) {
+        let current = queue.shift();
+        console.log('i', i, 'current', current);
+        if (current === i) break;
+        adjList[current].forEach(v => {
+          if (!visited.has(v)) {
+            visited.add(v);
+            queue.push(v);
+          }
+        });
+        distance += 6;
+      }
+      output.push(distance);
+    }
+  }
+  return output;
+}
+
+module.exports = {
+  Graph,
+  Node,
+  shortestPath,
+  canFinish,
+  numIslands,
+  shortestReach,
+};
