@@ -158,6 +158,47 @@ function replicate(times, number) {
   return _replicate(times, number);
 }
 
+// Return true if string contains balances brackets, false if not
+function balancedBrackets(str) {
+  let i = 0;
+  let count = 0;
+  let closed = [];
+  function _balancedBrackets(str) {
+    if (i === str.length) {
+      if (count === 0) {
+        return true;
+      }
+      return false;
+    }
+    switch (str[i]) {
+      case '{':
+        count++;
+        closed.push('}');
+        break;
+      case '[':
+        count++;
+        closed.push(']');
+        break;
+      case '(':
+        count++;
+        closed.push(')');
+        break;
+      case ')':
+      case ']':
+      case '}':
+        if (str[i] !== closed[closed.length - 1]) return false;
+        count--;
+        closed.pop();
+        break;
+      default:
+        break;
+    }
+    i++;
+    return _balancedBrackets(str);
+  }
+  return _balancedBrackets(str);
+}
+
 module.exports = {
   revString,
   product,
@@ -170,4 +211,5 @@ module.exports = {
   realSize,
   sumSquares,
   replicate,
+  balancedBrackets,
 };
