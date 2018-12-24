@@ -199,6 +199,59 @@ function balancedBrackets(str) {
   return _balancedBrackets(str);
 }
 
+// return space-separated flattened string based on array of arrays
+function dump(square) {
+  if (square === 0 || square === 1) {
+    return square.toString();
+  }
+  return square.map(s => dump(s)).join(' ');
+}
+
+function validate(square) {
+  if (square === 0 || square === 1) {
+    return true;
+  }
+  if (Array.isArray(square) && square.length === 4) {
+    return square.every(s => validate(s));
+  }
+  return false;
+}
+
+function simplify(square) {
+  if (square === 0 || square === 1) {
+    return square;
+  }
+  if (
+    square.every(
+      (s, i, arr) =>
+        !Array.isArray(simplify(square[i])) &&
+        simplify(square[i]) === simplify(square[0])
+    )
+  ) {
+    return simplify(square[0]);
+  } else {
+    return square.map(s => simplify(s));
+  }
+}
+
+// function simplify(s) {
+//   console.log('s', s);
+//   if (s === 0 || s === 1) {
+//     return s;
+//   }
+
+//   var q1 = simplify(s[0]);
+//   var q2 = simplify(s[1]);
+//   var q3 = simplify(s[2]);
+//   var q4 = simplify(s[3]);
+
+//   if (Number.isInteger(q1) && q1 === q2 && q1 === q3 && q1 === q4) {
+//     return q1;
+//   }
+
+//   return [q1, q2, q3, q4];
+// }
+
 module.exports = {
   revString,
   product,
@@ -212,4 +265,7 @@ module.exports = {
   sumSquares,
   replicate,
   balancedBrackets,
+  dump,
+  validate,
+  simplify,
 };
