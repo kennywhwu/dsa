@@ -14,6 +14,7 @@ const {
   dump,
   validate,
   simplify,
+  add,
 } = require('./recursion-exercises');
 
 describe('revString', function() {
@@ -226,5 +227,31 @@ describe('simplify', function() {
       [1, 0, 1, 1],
       1,
     ]);
+  });
+});
+
+describe('add', function() {
+  it('returns added result of two passed-in squares', function() {
+    expect(add(0, 1)).toEqual(1);
+    expect(add(0, [1, 0, 1, 0])).toEqual([1, 0, 1, 0]);
+    expect(add([0, 0, 0, 1], [0, 1, 0, 1])).toEqual([0, 1, 0, 1]);
+    expect(
+      add(
+        [0, [1, 1, 1, [0, 0, 0, 0]], [0, 0, 0, 0], 1],
+        [1, [1, 0, 1, [0, 0, 1, 1]], [1, 0, 1, 0], 1]
+      )
+    ).toEqual([1, [1, 1, 1, [0, 0, 1, 1]], [1, 0, 1, 0], 1]);
+    expect(
+      add(
+        [0, [1, 1, 1, 0], [0, 0, 0, 0], 1],
+        [1, [1, 0, 1, [0, 0, 1, 1]], [1, 0, 1, 0], 1]
+      )
+    ).toEqual([1, [1, 1, 1, [0, 0, 1, 1]], [1, 0, 1, 0], 1]);
+    expect(
+      add(
+        [0, [1, 1, 1, 1], [0, 0, 0, 0], 1],
+        [1, [1, 0, 1, [0, [0, 0, 0, 0], 1, 1]], [1, 0, 1, 0], 1]
+      )
+    ).toEqual([1, [1, 1, 1, [1, [1, 1, 1, 1], 1, 1]], [1, 0, 1, 0], 1]);
   });
 });

@@ -234,23 +234,24 @@ function simplify(square) {
   }
 }
 
-// function simplify(s) {
-//   console.log('s', s);
-//   if (s === 0 || s === 1) {
-//     return s;
-//   }
-
-//   var q1 = simplify(s[0]);
-//   var q2 = simplify(s[1]);
-//   var q3 = simplify(s[2]);
-//   var q4 = simplify(s[3]);
-
-//   if (Number.isInteger(q1) && q1 === q2 && q1 === q3 && q1 === q4) {
-//     return q1;
-//   }
-
-//   return [q1, q2, q3, q4];
-// }
+function add(square1, square2) {
+  if (typeof square1 === 'number' && typeof square2 === 'number') {
+    if (square1 !== square2) return 1;
+    if (square1 === square2) return square1;
+  }
+  if (Array.isArray(square1) && !Array.isArray(square2)) {
+    square2 = [square2, square2, square2, square2];
+  }
+  if (Array.isArray(square2) && !Array.isArray(square1)) {
+    square1 = [square1, square1, square1, square1];
+  }
+  return [
+    add(square1[0], square2[0]),
+    add(square1[1], square2[1]),
+    add(square1[2], square2[2]),
+    add(square1[3], square2[3]),
+  ];
+}
 
 module.exports = {
   revString,
@@ -268,4 +269,5 @@ module.exports = {
   dump,
   validate,
   simplify,
+  add,
 };
