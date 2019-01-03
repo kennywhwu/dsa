@@ -84,10 +84,44 @@ function isPrime(num) {
   return true;
 }
 
+// Return true if permutation of string1 exists in string2 (from Leetcode)
+function checkPermutation(str1, str2) {
+  if (str1 === str2) return true;
+  if (str1.length > str2.length) return false;
+  let freq = {};
+  for (let i = 0; i < str1.length; i++) {
+    freq[str1[i]] = ++freq[str1[i]] || 1;
+  }
+  let freqRef = { ...freq };
+
+  let start = 0;
+  let end = 0;
+  while (start < str2.length && end < str2.length) {
+    if (freq[str2[end]] === undefined) {
+      freq = { ...freqRef };
+      start = end + 1;
+      end++;
+    } else if (freq[str2[end]]) {
+      freq[str2[end]]--;
+      end++;
+    } else {
+      freq[str2[start]]++;
+      start++;
+    }
+    let empty = true;
+    for (let key in freq) {
+      if (freq[key]) empty = false;
+    }
+    if (empty) return true;
+  }
+  return false;
+}
+
 module.exports = {
   convertZigzag,
   generateParenthesis,
   longestValidParentheses,
   reverseWords,
   isPrime,
+  checkPermutation,
 };

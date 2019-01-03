@@ -4,6 +4,7 @@ const {
   longestValidParentheses,
   reverseWords,
   isPrime,
+  checkPermutation,
 } = require('./general-exercises');
 
 describe('convertZigzag', function() {
@@ -47,5 +48,13 @@ describe('isPrime', function() {
     expect(isPrime(20)).toEqual(false);
     expect(isPrime(25)).toEqual(false);
     expect(isPrime(101)).toEqual(true);
+  });
+});
+
+describe('checkPermutation', function() {
+  it('should_return_true_if_permutation_of_first_string_exists_in_second_string', function() {
+    expect(checkPermutation('ab', 'eidbaooo')).toEqual(true);
+    expect(checkPermutation('ab', 'eidboaoo')).toEqual(false);
+    expect(checkPermutation('adc', 'dcda')).toEqual(true);
   });
 });
