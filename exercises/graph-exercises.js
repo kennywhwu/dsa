@@ -235,46 +235,63 @@ function canFinish(numCourses, prerequisites) {
   return output;
 }
 
-// Return true if no cycles in graph, else return false (from LeetCode)
-function findOrder(numCourses, prerequisites) {
-  let obj = {};
-  for (let i = 0; i < prerequisites.length; i++) {
-    if (obj[prerequisites[i][0]]) {
-      obj[prerequisites[i][0]].push(prerequisites[i][1].toString());
-    } else {
-      obj[prerequisites[i][0]] = [prerequisites[i][1].toString()];
-    }
-  }
-  let visited = new Set();
-  let cycle = true;
+// // Return true if no cycles in graph, else return false (from LeetCode)
+// function findOrder(numCourses, prerequisites) {
+//   let obj = {};
+//   for (let i = 0; i < prerequisites.length; i++) {
+//     if (obj[prerequisites[i][0]]) {
+//       obj[prerequisites[i][0]].push(prerequisites[i][1].toString());
+//     } else {
+//       obj[prerequisites[i][0]] = [prerequisites[i][1].toString()];
+//     }
+//   }
+//   let visited = new Set();
+//   let cycle = true;
 
-  function _hasCycle(node, key, path) {
-    if (!node) return;
-    visited.add(node);
-    path.push(node);
-    if (!obj[node]) return;
-    obj[node].forEach(v => {
-      if (v === key) {
-        // cycle = false;
-        return false;
-      }
-      if (!visited.has(v)) _hasCycle(v, key, path);
-    });
-  }
+//   function _hasCycle(node, key, path) {
+//     if (!node) return;
+//     visited.add(node);
+//     path.push(node);
+//     if (!obj[node]) return;
+//     obj[node].forEach(v => {
+//       if (v === key) {
+//         // cycle = false;
+//         return false;
+//       }
+//       if (!visited.has(v)) _hasCycle(v, key, path);
+//     });
+//   }
 
-  for (let key in obj) {
-    if (cycle) {
-      let path = [];
-      if (!_hasCycle(key, key, path)) return false;
-      if (path.length === numCourses) return true;
-      visited = new Set();
-    }
-  }
-}
+//   for (let key in obj) {
+//     if (cycle) {
+//       let path = [];
+//       if (!_hasCycle(key, key, path)) return false;
+//       if (path.length === numCourses) return true;
+//       visited = new Set();
+//     }
+//   }
+// }
 
 // Return number of islands in passed in grid (from LeetCode)
 function numIslands(grid) {
+  function numIslandsDFS(grid, i, j) {
+    if (
+      !grid ||
+      i < 0 ||
+      j < 0 ||
+      i >= grid.length ||
+      j >= grid[0].length ||
+      +grid[i][j] !== 1
+    )
+      return;
+    grid[i][j] = 0;
+    numIslandsDFS(grid, i - 1, j);
+    numIslandsDFS(grid, i + 1, j);
+    numIslandsDFS(grid, i, j - 1);
+    numIslandsDFS(grid, i, j + 1);
+  }
   let count = 0;
+
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
       if (+grid[i][j] === 1) {
@@ -287,58 +304,234 @@ function numIslands(grid) {
   return count;
 }
 
-function numIslandsDFS(grid, i, j) {
-  if (
-    !grid ||
-    i < 0 ||
-    j < 0 ||
-    i >= grid.length ||
-    j >= grid[0].length ||
-    +grid[i][j] !== 1
-  )
-    return;
-  grid[i][j] = 0;
-  numIslandsDFS(grid, i - 1, j);
-  numIslandsDFS(grid, i + 1, j);
-  numIslandsDFS(grid, i, j - 1);
-  numIslandsDFS(grid, i, j + 1);
-}
-
-function shortestReach(nodeCount, edgeCount, edges, start) {
+// Return distances of start node to every other node (all edge weights are 6) (from HackerRank)
+function shortestReach(n, m, edges, s) {
   let adjList = {};
-  // initiate adjacency list with nodes
-  for (let i = 1; i <= nodeCount; i++) {
+  for (let i = 1; i <= n; i++) {
     adjList[i] = [];
   }
-  // add edges to nodes adjacency list
   edges.forEach(edge => {
     adjList[edge[0]].push(edge[1]);
     adjList[edge[1]].push(edge[0]);
   });
 
-  // bfs traversal
-  let output = [];
-  for (let i = 1; i <= nodeCount; i++) {
-    if (i !== start) {
-      let queue = [start];
-      let distance = 0;
-      let visited = new Set();
-      while (queue.length) {
-        let current = queue.shift();
-        console.log('i', i, 'current', current);
-        if (current === i) break;
-        adjList[current].forEach(v => {
-          if (!visited.has(v)) {
-            visited.add(v);
-            queue.push(v);
-          }
-        });
-        distance += 6;
+  let distances = [];
+  let currentSum = 0;
+  let visited = new Set();
+  function _DFS(node, target) {
+    if (node === target) {
+      distances.push(currentSum);
+      found = true;
+      return true;
+    }
+    visited.add(node);
+    adjList[node].forEach(v => {
+      if (!visited.has(v)) {
+        currentSum += 6;
+        _DFS(v, target);
+        currentSum -= 6;
+        visited.delete(v);
       }
-      output.push(distance);
+    });
+  }
+
+  let found = false;
+  for (let i = 1; i <= n; i++) {
+    if (i !== s) {
+      _DFS(s, i);
+      if (!found) distances.push(-1);
+    }
+    found = false;
+  }
+  return distances;
+}
+
+// // Return distances of start node to every other node (all edge weights are 6) (from HackerRank)
+// function shortestReach(nodeCount, edgeCount, edges, start) {
+//   let adjList = {};
+//   // initiate adjacency list with nodes
+//   for (let i = 1; i <= nodeCount; i++) {
+//     adjList[i] = [];
+//   }
+//   // add edges to nodes adjacency list
+//   edges.forEach(edge => {
+//     adjList[edge[0]].push(edge[1]);
+//     adjList[edge[1]].push(edge[0]);
+//   });
+
+//   // bfs traversal
+//   let output = [];
+//   for (let i = 1; i <= nodeCount; i++) {
+//     if (i !== start) {
+//       let queue = [start];
+//       let distance = 0;
+//       let visited = new Set();
+//       while (queue.length) {
+//         let current = queue.shift();
+//         console.log('i', i, 'current', current);
+//         if (current === i) break;
+//         adjList[current].forEach(v => {
+//           if (!visited.has(v)) {
+//             visited.add(v);
+//             queue.push(v);
+//           }
+//         });
+//         distance += 6;
+//       }
+//       output.push(distance);
+//     }
+//   }
+//   return output;
+// }
+
+// function findOrder(numCourses,prerequisites){
+//   let paths = [];
+//   let path = [];
+//   let visited = new Set();
+
+//   function _DFS(node, target){
+//     // if(node[1] === target[1]) return false;
+//     if(visited.size === numCourses){
+//       paths.push(path);
+//     } else {
+//       return;
+//     }
+//     prerequisites.forEach(v=>{
+//       if(v[0]===target[0]) return;
+//     )
+
+//   }
+
+//   for(let i = 0; i < prerequisites.length;i++){
+//     _DFS(i, i)
+//   }
+// }
+
+// Return true if directed graph has cycle (cannot be completed due to cyclic dependencies) (from CodeSignal)
+function hasDeadlock(connections) {
+  let cycleArr = [];
+  function _hasCycle(n) {
+    if (n in cycleArr) return cycleArr[n];
+    cycleArr[n] = true;
+    cycleArr[n] = connections[n].some(_hasCycle);
+  }
+  return connections.some((e, i) => _hasCycle(i));
+}
+
+// Return true if all nodes in graph are connected (from CodeSignal)
+function isConnected(connections) {
+  let visited = new Set();
+  function _connected(n) {
+    visited.add(n);
+    if (visited.size === connections.length) return true;
+    for (let i = 0; i < connections[n].length; i++) {
+      if (connections[n][i] === 1 && !visited.has(i) && _connected(i))
+        return true;
     }
   }
-  return output;
+  if (_connected(0)) return true;
+  return false;
+}
+
+// Return number of connections in graph that if broken, would result in graph no longer being connected (from CodeSignal)
+function singlePointOfFailure(connections) {
+  let count = 0;
+  for (let i = 0; i < connections.length; i++) {
+    for (let j = i; j < connections[i].length; j++) {
+      if (connections[i][j] === 1) {
+        connections[i][j] = 0;
+        connections[j][i] = 0;
+        if (!isConnected(connections)) count++;
+        connections[i][j] = 1;
+        connections[j][i] = 1;
+      }
+    }
+  }
+  return count;
+}
+
+// Returns minimum number of colors needed for graph to not have any adjacent vertices sharing a color
+function colorMap(arr) {
+  let colorRef = [];
+  function _isSafe(node, color) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].includes(node) && color === colorRef[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function _graphColors(node) {
+    let color = 1;
+    while (node < arr.length) {
+      if (_isSafe(node, color)) {
+        colorRef[node] = color;
+        if (node + 1 < arr.length) {
+          return _graphColors(node + 1);
+        } else {
+          return Math.max(...colorRef);
+        }
+      }
+      color++;
+    }
+  }
+  return _graphColors(0);
+}
+
+// Return minimum number of days needed for classes to come to feed animals if they cannot overlap animals in a day (-1 if > 5) (from CodeSignal)
+function feedingTime(classes) {
+  let adj = [];
+  for (let i = 0; i < classes.length; i++) {
+    adj[i] = [i, new Set()];
+  }
+
+  for (let i = 0; i < classes.length; i++) {
+    for (let j = 0; j < classes[i].length; j++) {
+      for (let k = i + 1; k < classes.length; k++) {
+        if (classes[k].some(animal => animal === classes[i][j])) {
+          adj[i][1].add(k);
+          adj[k][1].add(i);
+        }
+      }
+    }
+  }
+
+  adj.sort((a, b) => b[1].size - a[1].size);
+  console.log(adj);
+  let visited = new Set();
+  let colorRef = [];
+  function _isSafe(node, color) {
+    for (let i = 0; i < adj.length; i++) {
+      if (adj.find(e => e[0] === i)[1].has(node) && color === colorRef[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function _graphColors(node, i) {
+    visited.add(node);
+    let color = 1;
+    while (node < adj.length) {
+      if (_isSafe(node, color)) {
+        colorRef[node] = color;
+        if (i + 1 < adj.length) {
+          return _graphColors(adj[i + 1][0], i + 1);
+        } else {
+          return Math.max(...colorRef);
+        }
+      }
+      color++;
+    }
+  }
+
+  let max = 0;
+  for (let i = 0; i < adj.length; i++) {
+    if (!visited.has(adj[i][0])) {
+      max = Math.max(max, _graphColors(adj[i][0], i));
+    }
+  }
+  return max <= 5 ? max : -1;
 }
 
 module.exports = {
@@ -348,4 +541,10 @@ module.exports = {
   canFinish,
   numIslands,
   shortestReach,
+  // findOrder,
+  hasDeadlock,
+  isConnected,
+  singlePointOfFailure,
+  feedingTime,
+  colorMap,
 };

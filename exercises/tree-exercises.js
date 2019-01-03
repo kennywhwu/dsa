@@ -264,6 +264,82 @@ class BinaryTree {
       ? path1[path1.length - 1]
       : path2[path2.length - 1];
   }
+
+  // Use DFS to find all root-to-leaf paths that equal the given sum
+  pathSum(target) {
+    let paths = [];
+    let currentPath = [];
+    let sum = 0;
+
+    function _DFS(start) {
+      currentPath.push(start.val);
+      sum += start.val;
+      if (sum === target && !start.left && !start.right) {
+        paths.push([...currentPath]);
+      }
+      if (start.left) {
+        _DFS(start.left);
+        currentPath.pop();
+        sum -= start.left.val;
+      }
+      if (start.right) {
+        _DFS(start.right);
+        currentPath.pop();
+        sum -= start.right.val;
+      }
+    }
+
+    _DFS(this.root);
+    return paths;
+  }
+}
+
+// Return true if a root to leaf node path exists with passed-in sum
+function hasPathWithGivenSum(t, s) {
+  let sum = 0;
+  function _DFS(node) {
+    if (node === null) return;
+    sum += node.value;
+    if (node.left) {
+      if (_DFS(node.left)) return true;
+      sum -= node.left.value;
+    }
+    if (node.right) {
+      if (_DFS(node.right)) return true;
+      sum -= node.right.value;
+    }
+    if (node.left === null && node.right === null && sum === s) {
+      return true;
+    }
+  }
+  if (_DFS(t)) return true;
+  return false;
+}
+
+// Return true if tree is symmetric (mirrored along vertical half) (from CodeSignal)
+function isTreeSymmetric(t) {
+  if (t === null) return true;
+  function _DFS(left, right) {
+    if (left === null && right === null) return true;
+    if (left === null || right === null) return false;
+    if (left.left !== null || right.right !== null) {
+      if (_DFS(left.left, right.right)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (left.right !== null || right.left !== null) {
+      if (_DFS(left.right, right.left)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (left.value == right.value) return true;
+  }
+  if (_DFS(t.left, t.right)) return true;
+  return false;
 }
 
 module.exports = {
@@ -271,4 +347,6 @@ module.exports = {
   Tree,
   BiNode,
   BinaryTree,
+  hasPathWithGivenSum,
+  isTreeSymmetric,
 };

@@ -1,0 +1,86 @@
+Conceptual Questions:
+
+What is Big O Notation?
+What is the call stack?
+What is a base case?
+What is the difference between time and space complexity?
+What are some advantages/disadvantages to using Linked Lists versus arrays?
+What is the difference between a tree and a graph?
+What is the difference between a binary search tree and binary tree?
+What are graphs used for?
+What are trees used for?
+What are linked lists used for?
+What is a stack? Where and how are they used?
+What is a queue? Where and how are they used?
+What is an adjacency list?
+What is an adjacency matrix?
+Explain conceptually how BFS in a graph works
+Explain conceptually how DFS in a graph works
+
+Algorithm Design
+Describe your algorithm design for each of the following challenges. This can or can not include using certain data structures. Think about additional questions that may require you to change the system!
+
+How would you build a system that stores and manages the hierarchy of an organization.
+  // Tree: Root node is the head of the organization, its children are department leaders under the head, and subteams/team members further down
+  // As another person is added, determine what the relationship would be with an entity that exists in the tree.  Traverse tree with BFS to quickly find entity for O(n). If placed between connected entities, then first connect added one to necessary nodes. Add person as a child to the parent entity node for O(1).  
+  // If someone with children is removed, traverse tree with BFS to find parent in O(n), then connect its parent to the removed entity's children for O(1).  Nullify removed person's children to prevent broken access to the tree.
+
+Build the functionality to allow for undo and redo. Think of this feature like what you’ve used in a text editor or word processor.
+  // Stack: Each action is pushed to top of stack for O(1). 
+  // As each action is undone, pop top action off and push onto second stack for O(1) per action.  
+  // For redo, pop off of second stack and push back onto first stack for O(1).
+  // If actions are undone, then a new action is taken, then second stack is cleared (can't undo again) for O(1)
+
+If you were building a game of Snake, what would be an optimal data structure for the snake?
+  // Board would be a 2D matrix
+  // Snake would be a linked list of coordinates
+  // When snake moves forward, new tail can be pushed on for O(1), and head can be shifted off for O(1)
+  // When snake eats item, new tail is pushed on for O(1) and head stays on so snake grows
+
+Write a system that accepts a string of HTML and validates it.
+  // Graph: HTML is made up of opening and closing tags with elements inside
+  // Once tag is completed, would need to repoint back to beginning node to repeat (like a tree that points back to its root)
+
+A numeric array of length N is given. We need to design a function that finds all positive numbers in the array that have their opposites (a number that when added results - 0) in it as well.
+  // Sort for O(n log n), then use multiple pointers on start and end
+  // If sum of two elements is 0, then push positive value into separate array and move both pointers inward
+  // If sum > 0 then move end pointer to left
+  // If sum < 0 then move start pointer to right
+  // Continue until both pointers cross, for O(n)
+  // Overall would be O(n log n)
+
+Build a game of tug of war. You should be able to add players to both teams.
+  // Object: two keys would be teams; value of each key would be a Set to hold players, can add and delete in O(1)
+  // Can also loop through set to add up values if want to return a "weight" of the team strength
+
+You’re building the system at McDonalds for managing your order.
+  // Deque: As customer orders, their order is enqueued for O(1).  As another customer orders, their order enqueues to the end
+  // First order in queue is worked on, then dequeued when completed for O(1).
+  // Completed order is added to Set for O(1) waiting to be picked up.  When order is picked up by customer, order is deleted from Set in O(1)
+  // If order has problem after being completed/picked up, can enqueue back to front of order deque so it will be the next order to be worked on.
+
+Design a simple calculator that can handle addition, subtraction, multiplication and division.
+  // Object: each key in object is calculator operation.  Each value is a function that runs that operation on two parameters
+
+Build a game of Rock paper scissors. How could you build a system that scales to hundreds of options (Spock, Lizard, fire, water, etc.)
+  // Directed, cyclic, unweighted graph: Rock, paper, scissors would be cyclic in that each element defeats and is defeated by another element that connects together.  They are directed due to only going in one direction of defeating.
+  // When new options are added, would need to know the relationship with other existing elements (ie. which defeats or is defeated by which?).  Can use adjacency matrix to keep track and easily insert new options and relationships.
+
+You need to design a system that can schedule tasks at different times.
+  // Priority queue: Set task with higher priority to those with earlier execution times.  Implement max heap for O(log n)
+  // When time to execute, higher priority task is dequeued for O(1).
+
+Now that you have designed the scheduler, a number of the tasks need to wait for some other tasks to complete prior to running themselves. How would this change your system?
+  // Directed graph: If certain tasks need prerequisites before being performed, those tasks connect to the following ones in one direction.
+  // May be able to still use priority queue with combination of time to execute and prerequisites as measure of priority
+
+Merge k sorted arrays, Given k sorted arrays of size n each, merge them and print the sorted output.
+  // Use k number of pointers, one on each array starting on left.  Insert lowest pointed element into separate array.  For array which had element inserted, move pointer to right and continue process until each end of all arrays in O(nk)
+
+Given a map of the United States, and N number of colors, figure out all the ways each state can be colored as long as no two bordering states have the same color.
+  //
+
+Given a chessboard of N\*N, how many different ways can you arrange the board so that N number of queens can be placed without attacking each other vertically, horizontally or diagonally.
+Design the pseudocode for a Minesweeper game
+Design a game of battleship, how would you lay out the board?
+Create a system that allows for scheduling events on a calendar for available dates.

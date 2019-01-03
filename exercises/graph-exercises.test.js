@@ -5,6 +5,12 @@ const {
   canFinish,
   numIslands,
   shortestReach,
+  findOrder,
+  hasDeadlock,
+  isConnected,
+  singlePointOfFailure,
+  feedingTime,
+  colorMap,
 } = require('./graph-exercises');
 
 let graph = new Graph();
@@ -190,22 +196,28 @@ describe('canFinish', function() {
 
 // describe('findOrder', function() {
 //   it('should_return_path_to_complete_courses_with_prerequisites', function() {
-//     expect(findOrder(2, [['A', 'B'], ['A', 'C']])).toEqual(['A']);
-//     expect(findOrder(2, [['A', 'B'], ['B', 'A']])).toEqual(false);
-//     expect(
-//       findOrder(5, [
-//         ['A', 'B'],
-//         ['A', 'C'],
-//         ['C', 'D'],
-//         ['D', 'B'],
-//         ['E', 'A'],
-//         ['C', 'E'],
-//       ])
-//     ).toEqual(false);
-//     expect(
-//       findOrder(5, [['A', 'B'], ['A', 'C'], ['C', 'D'], ['D', 'B'], ['C', 'E']])
-//     ).toEqual(true);
-//     expect(findOrder(2, [[0, 1], [1, 0]])).toEqual(false);
+//     let result = JSON.stringify(
+//       findOrder(4, [['1', '0'], ['2', '0'], ['3', '1'], ['3', '2']])
+//     );
+//     let validResult =
+//       result === JSON.stringify(['0', '2', '1', '3']) ||
+//       result === JSON.stringify(['0', '1', '2', '3']);
+//     expect(validResult).toEqual(true);
+// let result = JSON.stringify(
+//   findOrder(5, [['1', '0'], ['2', '0'], ['3', '1'], ['3', '2']])
+// );
+// let validResult =
+//   result === JSON.stringify(['4', '0', '2', '1', '3']) ||
+//   result === JSON.stringify(['4', '0', '1', '2', '3']) ||
+//   result === JSON.stringify(['0', '4', '2', '1', '3']) ||
+//   result === JSON.stringify(['0', '4', '1', '2', '3']) ||
+//   result === JSON.stringify(['0', '2', '4', '1', '3']) ||
+//   result === JSON.stringify(['0', '1', '4', '2', '3']) ||
+//   result === JSON.stringify(['0', '2', '1', '4', '3']) ||
+//   result === JSON.stringify(['0', '1', '2', '4', '3']) ||
+//   result === JSON.stringify(['0', '2', '1', '3', '4']) ||
+//   result === JSON.stringify(['0', '1', '2', '3', '4']);
+// expect(validResult).toEqual(true);
 //   });
 // });
 
@@ -358,10 +370,123 @@ describe('pathStartToTarget', function() {
   });
 });
 
-// describe('shortestReach', function() {
-//   it('should_return_array_of_shortest_distances_from_start_to_all_other_nodes', function() {
-//     // expect(shortestReach(3, 2, [[1, 2], [1, 3]], 1)).toEqual([6, 6]);
-//     expect(shortestReach(4, 2, [[1, 2], [1, 3]], 1)).toEqual([6, 6, -1]);
-//     // expect(shortestReach(3, 1, [[2, 3]], 2)).toEqual([-1, 6]);
-//   });
-// });
+describe('shortestReach', function() {
+  it('should_return_array_of_shortest_distances_from_start_to_all_other_nodes', function() {
+    expect(shortestReach(3, 2, [[1, 2], [1, 3]], 1)).toEqual([6, 6]);
+    expect(shortestReach(4, 2, [[1, 2], [1, 3]], 1)).toEqual([6, 6, -1]);
+    expect(shortestReach(4, 2, [[1, 2], [1, 3]], 4)).toEqual([-1, -1, -1]);
+    expect(shortestReach(3, 1, [[2, 3]], 2)).toEqual([-1, 6]);
+    expect(shortestReach(3, 1, [[2, 3]], 2)).toEqual([-1, 6]);
+  });
+});
+
+describe('hasDeadlock', function() {
+  it('should_return_true_if_graph_has_cycle', function() {
+    expect(hasDeadlock([[1], [2], [3, 4], [4], [0]])).toEqual(true);
+    expect(hasDeadlock([[1, 2, 3], [2, 3], [3], []])).toEqual(false);
+  });
+});
+
+describe('isConnected', function() {
+  it('should_return_true_if_graph_all_nodes_are_connected', function() {
+    expect(
+      isConnected([
+        [0, 1, 1, 1, 0, 0],
+        [1, 0, 1, 0, 0, 0],
+        [1, 1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1, 1],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+      ])
+    ).toEqual(true);
+    expect(
+      isConnected([
+        [0, 0, 1, 1, 1],
+        [0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+      ])
+    ).toEqual(false);
+  });
+});
+
+describe('singlePointOfFailure', function() {
+  it('should_return_count_of_connections_that_would_cause_graph_to_not_be_connected', function() {
+    expect(singlePointOfFailure([[0, 1], [1, 0]])).toEqual(1);
+    expect(singlePointOfFailure([[0, 1, 1], [1, 0, 1], [1, 1, 0]])).toEqual(0);
+    expect(
+      singlePointOfFailure([
+        [0, 1, 1, 1, 0, 0],
+        [1, 0, 1, 0, 0, 0],
+        [1, 1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1, 1],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+      ])
+    ).toEqual(3);
+    expect(
+      singlePointOfFailure([
+        [0, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+      ])
+    ).toEqual(4);
+  });
+});
+
+describe('feedingTime', function() {
+  it('should_return_minimum_number_of_days_for_classes_to_not_overlap_feeding_animals', function() {
+    // expect(
+    //   feedingTime([
+    //     ['Tiger', 'Lima', 'Frog'],
+    //     ['Tiger', 'Zebra', 'Lion'],
+    //     ['Tiger', 'Rabbit'],
+    //     ['Emu', 'Zebra', 'Rabbit'],
+    //   ])
+    // ).toEqual(3);
+    // expect(
+    //   feedingTime([
+    //     ['Tiger', 'Lima', 'Frog'],
+    //     ['Tiger', 'Zebra', 'Lion'],
+    //     ['Tiger', 'Rabbit'],
+    //     ['Lima', 'Zebra', 'Rabbit'],
+    //   ])
+    // ).toEqual(4);
+    // expect(
+    //   feedingTime([
+    //     ['Lion', 'Emu'],
+    //     ['Giraffe', 'Peacock'],
+    //     ['Lima'],
+    //     ['Tiger', 'Cheetah', 'Slugs'],
+    //     ['Snakes', 'Sealion'],
+    //   ])
+    // ).toEqual(1);
+    // expect(
+    //   feedingTime([
+    //     ['Coati', 'Ram'],
+    //     ['Chameleon', 'Buffalo', 'Coati'],
+    //     ['Elk', 'Coyote', 'Jerboa'],
+    //     ['Coyote', 'Elk'],
+    //     ['Gorilla', 'Chameleon'],
+    //     ['Fawn', 'Alpaca', 'Coyote'],
+    //     ['Raccoon', 'Bear', 'Coyote', 'Walrus'],
+    //     ['ocelot', 'Coyote', 'Giraffe'],
+    //   ])
+    // ).toEqual(5);
+    expect(
+      feedingTime([['A', 'B'], ['C'], ['C', 'D', 'E'], ['A', 'D'], ['B', 'E']])
+    ).toEqual(2);
+  });
+});
+
+describe('colorMap', function() {
+  it('should_return_minimum_number_of_colors_needed_for_map', function() {
+    expect(colorMap([[]])).toEqual(1);
+    expect(colorMap([[1], [0]])).toEqual(2);
+    expect(colorMap([[1, 2], [0, 2, 3], [0, 1, 3], [1, 2]])).toEqual(3);
+    expect(colorMap([[1, 2, 3], [0, 2, 3], [0, 1, 3], [0, 1, 2]])).toEqual(4);
+  });
+});

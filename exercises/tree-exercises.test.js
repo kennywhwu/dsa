@@ -1,4 +1,11 @@
-const { Node, Tree, BiNode, BinaryTree } = require('./tree-exercises');
+const {
+  Node,
+  Tree,
+  BiNode,
+  BinaryTree,
+  hasPathWithGivenSum,
+  isTreeSymmetric,
+} = require('./tree-exercises');
 
 let root1 = new Node(10);
 let b1 = new Node(1);
@@ -169,5 +176,223 @@ describe('lowestCommonAncestor', function() {
     expect(LCATree.lowestCommonAncestor(new Node(2), new Node(7))).toBe(2);
     expect(LCATree.lowestCommonAncestor(new Node(7), new Node(6))).toBe(5);
     expect(LCATree.lowestCommonAncestor(new Node(8), new Node(0))).toBe(1);
+  });
+});
+
+describe('pathSum', function() {
+  it('returns_array_of_all_paths_that_sum_to_target', function() {
+    let biC4 = new BiNode(1);
+    let biC3 = new BiNode(5);
+    let biC2 = new BiNode(2);
+    let biC1 = new BiNode(7);
+    let biB4 = new BiNode(4, biC3, biC4);
+    let biB3 = new BiNode(13);
+    let biB1 = new BiNode(11, biC1, biC2);
+    let biA2 = new BiNode(8, biB3, biB4);
+    let biA1 = new BiNode(4, biB1);
+    let root4 = new BiNode(5, biA1, biA2);
+
+    let tree4 = new BinaryTree(root4);
+
+    let result1 = tree4
+      .pathSum(22)
+      .map(arr => JSON.stringify(arr))
+      .sort();
+    let test1 = [[5, 4, 11, 2], [5, 8, 4, 5]]
+      .map(arr => JSON.stringify(arr))
+      .sort();
+    expect(result1.sort()).toEqual(test1.sort());
+  });
+});
+
+describe('hasPathWithGivenSum', function() {
+  it('should_return_true_if_root_to_leaf_path_that_equals_passed_in_sum_exists', function() {
+    t1 = {
+      value: 4,
+      left: {
+        value: 1,
+        left: {
+          value: -2,
+          left: null,
+          right: {
+            value: 3,
+            left: null,
+            right: null,
+          },
+        },
+        right: null,
+      },
+      right: {
+        value: 3,
+        left: {
+          value: 1,
+          left: null,
+          right: null,
+        },
+        right: {
+          value: 2,
+          left: {
+            value: -2,
+            left: null,
+            right: null,
+          },
+          right: {
+            value: -3,
+            left: null,
+            right: null,
+          },
+        },
+      },
+    };
+    t2 = {
+      value: 4,
+      left: {
+        value: 1,
+        left: {
+          value: -2,
+          left: null,
+          right: {
+            value: 3,
+            left: null,
+            right: null,
+          },
+        },
+        right: null,
+      },
+      right: {
+        value: 3,
+        left: {
+          value: 1,
+          left: null,
+          right: null,
+        },
+        right: {
+          value: 2,
+          left: {
+            value: -4,
+            left: null,
+            right: null,
+          },
+          right: {
+            value: -3,
+            left: null,
+            right: null,
+          },
+        },
+      },
+    };
+    expect(hasPathWithGivenSum(t1, 7)).toEqual(true);
+    expect(hasPathWithGivenSum(t2, 7)).toEqual(false);
+    expect(hasPathWithGivenSum(null, 7)).toEqual(false);
+  });
+});
+
+describe('isTreeSymmetric', function() {
+  it('should_return_true_if_tree_is_symmetric_around_root_node', function() {
+    t1 = {
+      value: 1,
+      left: {
+        value: 2,
+        left: {
+          value: 3,
+          left: null,
+          right: null,
+        },
+        right: {
+          value: 4,
+          left: null,
+          right: null,
+        },
+      },
+      right: {
+        value: 2,
+        left: {
+          value: 4,
+          left: null,
+          right: null,
+        },
+        right: {
+          value: 3,
+          left: null,
+          right: null,
+        },
+      },
+    };
+    t2 = {
+      value: 1,
+      left: {
+        value: 2,
+        left: null,
+        right: {
+          value: 3,
+          left: null,
+          right: null,
+        },
+      },
+      right: {
+        value: 2,
+        left: null,
+        right: {
+          value: 3,
+          left: null,
+          right: null,
+        },
+      },
+    };
+    t3 = { value: 1, left: null, right: null };
+    t3a = {
+      value: 1,
+      left: { value: 2, left: null, right: null },
+      right: { value: 2, left: null, right: null },
+    };
+    t4 = {
+      value: 1,
+      left: {
+        value: 2,
+        left: {
+          value: 3,
+          left: null,
+          right: null,
+        },
+        right: {
+          value: 4,
+          left: null,
+          right: null,
+        },
+      },
+      right: {
+        value: 2,
+        left: {
+          value: 4,
+          left: null,
+          right: null,
+        },
+        right: {
+          value: 5,
+          left: null,
+          right: null,
+        },
+      },
+    };
+    t5 = {
+      value: 99,
+      left: {
+        value: 100,
+        left: null,
+        right: null,
+      },
+      right: {
+        value: 99,
+        left: null,
+        right: null,
+      },
+    };
+    expect(isTreeSymmetric(t1)).toEqual(true);
+    expect(isTreeSymmetric(t2)).toEqual(false);
+    expect(isTreeSymmetric(null)).toEqual(true);
+    expect(isTreeSymmetric(t3)).toEqual(true);
+    expect(isTreeSymmetric(t3a)).toEqual(true);
+    expect(isTreeSymmetric(t4)).toEqual(false);
+    expect(isTreeSymmetric(t5)).toEqual(false);
   });
 });
