@@ -1,4 +1,4 @@
-const { knightTour, ratMaze, ratMazeJump } = require('./backtracking');
+const { knightTour, ratMaze, ratMazeJump, nQueens } = require('./backtracking');
 
 describe('knightTour', () => {
   it('should not find solution on 3x3 board', () => {
@@ -74,6 +74,17 @@ describe('ratMazeJump', function() {
       [1, 0, 0, 1],
       [0, 0, 0, 1],
       [0, 0, 0, 1],
+    ]);
+  });
+});
+
+describe('nQueens', function() {
+  it('should_return_matrix_of_queen_positions_so_they_do_not_attack_each_other', function() {
+    expect(nQueens(4)).toEqual([
+      [0, 1, 0, 0],
+      [0, 0, 0, 1],
+      [1, 0, 0, 0],
+      [0, 0, 1, 0],
     ]);
   });
 });

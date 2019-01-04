@@ -81,7 +81,7 @@ function ratMazeJump(maze) {
     path[cell[0]][cell[1]] = 1;
     if (cell[0] === maze.length - 1 && cell[1] === maze[0].length - 1)
       return true;
-    for (let i = 1; i <= maze[cell[0]][cell[1]]; i++) {
+    for (let i = maze[cell[0]][cell[1]]; i > 0; i--) {
       if (cell[1] + i < maze[0].length && maze[cell[0]][cell[1] + i] > 0) {
         path[cell[0]][cell[1] + i] = 1;
         if (_traverseMaze([cell[0], cell[1] + i])) return path;
@@ -98,4 +98,78 @@ function ratMazeJump(maze) {
   return _traverseMaze([0, 0]) ? path : [];
 }
 
-module.exports = { knightTour, ratMaze, ratMazeJump };
+function nQueens(num) {
+  let board = Array(num)
+    .fill()
+    .map(() => Array(num).fill(0));
+
+  function _markSquares(cell, mark) {
+    //horizontal
+    for (let i = 0; i < board[cell[0]].length; i++) {
+      board[cell[0]][i] = mark;
+    }
+    //vertical
+    for (let i = 0; i < board.length; i++) {
+      board[i][cell[1]] = mark;
+    }
+    //diagonals
+    let y = cell[0];
+    let x = cell[1];
+    let yChange = 1;
+    let xChange = 1;
+    let counter = 0;
+    while (
+      (x - xChange >= 0 && y - yChange >= 0) ||
+      (x - xChange >= 0 && y + yChange < board.length) ||
+      (x + xChange < board[0].length && y + yChange < board.length) ||
+      (x + xChange < board[0].length && y - yChange >= 0)
+    ) {
+      if (y + yChange < board.length && x + xChange < board[0].length) {
+        board[y + yChange][x + xChange] = mark;
+      }
+      if (y + yChange < board.length && x - xChange >= 0) {
+        board[y + yChange][x - xChange] = mark;
+      }
+      if (y - yChange >= 0 && x + xChange < board[0].length) {
+        board[y - yChange][x + xChange] = mark;
+      }
+      if (y - yChange >= 0 && x - xChange >= 0) {
+        board[y - yChange][x - xChange] = mark;
+      }
+      xChange++;
+      yChange++;
+    }
+    board[cell[0]][cell[1]] = mark === 1 ? 2 : 0;
+  }
+
+  let counter = 0;
+
+  function _placeQueen(cell) {
+    if (counter === num) return true;
+    let next = [cell[0], cell[1] + 1];
+    while (next[1] >= board[0].length || board[next[0]][next[1]] !== 0) {
+      if (next[1] >= board[0].length) {
+        next = [next[0] + 1, 0];
+      }
+      if (board[next[0]][next[1]] !== 0) {
+        next = [next[0], next[1] + 1];
+      }
+    }
+    _markSquares(next, 1);
+    if (_placeQueen(next)) return true;
+    _markSquares(next, 0);
+  }
+
+  _placeQueen([0, 0]);
+  return board.map(e1 =>
+    e1.map(e2 => {
+      if (e2 === 2) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+  );
+}
+
+module.exports = { knightTour, ratMaze, ratMazeJump, nQueens };
