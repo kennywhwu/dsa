@@ -9,20 +9,16 @@
 
 function isValid(s) {
   let stack = [];
-  for (let i = 0; i < s.length; i++) {
-    if (s[i] === "(" || s[i] === "{" || s[i] === "[") stack.push(s[i]);
-    if (s[i] === ")") {
-      if (stack[stack.length - 1] === "(") {
+  for (let char of s) {
+    if (char === "{") stack.push("}");
+    if (char === "(") stack.push(")");
+    if (char === "[") stack.push("]");
+    if (char === "}" || char === ")" || char === "]") {
+      if (stack[stack.length - 1] === char) {
         stack.pop();
-      } else return false;
-    } else if (s[i] === "}") {
-      if (stack[stack.length - 1] === "{") {
-        stack.pop();
-      } else return false;
-    } else if (s[i] === "]") {
-      if (stack[stack.length - 1] === "[") {
-        stack.pop();
-      } else return false;
+      } else {
+        return false;
+      }
     }
   }
   return stack.length === 0;
