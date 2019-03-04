@@ -126,10 +126,8 @@ class Graph {
   // return array of all paths from start to target node using BFS (will always be shortest path(s))
   pathsBFS(start, target) {
     let paths = [];
-    let path = [start.value];
     let visited = new Set();
     let queue = [[start]];
-    let current;
     while (queue.length) {
       let currentPath = queue.shift();
       let currentNode = currentPath[currentPath.length - 1];
