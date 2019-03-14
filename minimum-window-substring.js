@@ -3,9 +3,6 @@
 // https://leetcode.com/problems/minimum-window-substring/
 
 function minWindow(s, t) {
-  //push index into queue when reach any element in freq, decrease count
-  //when freq = 0, count difference btw index of first and last in queue
-  //if reach char = to first index in queue, shift it out of queue
   let freq = {};
   for (let char of t) {
     freq[char] = ++freq[char] || 1;
