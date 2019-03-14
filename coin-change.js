@@ -2,16 +2,29 @@
 // https://leetcode.com/problems/coin-change/
 
 var coinChange = function(coins, amount) {
-  let countArray = Array.from({ length: amount + 1 }).fill(amount + 1);
-  countArray[0] = 0;
-  for (let i = 1; i <= amount; i++) {
-    for (let j = 0; j < coins.length; j++) {
-      if (coins[j] <= i) {
-        countArray[i] = Math.min(countArray[i], countArray[i - coins[j]] + 1);
+  let minCoinArr = Array(amount + 1).fill(amount + 1);
+  minCoinArr[0] = 0;
+  for (let i = 1; i < minCoinArr.length; i++) {
+    for (let coin of coins) {
+      if (coin <= i) {
+        minCoinArr[i] = Math.min(minCoinArr[i], minCoinArr[i - coin] + 1);
       }
     }
   }
-  return countArray[amount] > amount ? -1 : countArray[amount];
+  return minCoinArr[amount] > amount ? -1 : minCoinArr[amount];
 };
+
+// var coinChange = function(coins, amount) {
+//   let countArray = Array.from({ length: amount + 1 }).fill(amount + 1);
+//   countArray[0] = 0;
+//   for (let i = 1; i <= amount; i++) {
+//     for (let j = 0; j < coins.length; j++) {
+//       if (coins[j] <= i) {
+//         countArray[i] = Math.min(countArray[i], countArray[i - coins[j]] + 1);
+//       }
+//     }
+//   }
+//   return countArray[amount] > amount ? -1 : countArray[amount];
+// };
 
 module.exports = coinChange;
