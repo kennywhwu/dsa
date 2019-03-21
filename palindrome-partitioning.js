@@ -21,10 +21,9 @@ var partition = function(s) {
       // else loop through i = start to string length
     } else {
       for (let size = 1; size < s.length - idx + 1; size++) {
-        // console.log(size,idx,tempList)
         // create substring from start to end
         let str = s.substring(idx, idx + size);
-        // if substring is palindrome, push to tempList
+        // if substring is palindrome, push to tempList and move index
         if (_isPalindrome(str)) {
           tempList.push(str);
           idx += size;
@@ -34,7 +33,7 @@ var partition = function(s) {
         }
         // call helper function with tempList,
         _backtrack(tempList, idx);
-        // pop from tempList
+        // pop from tempList and bring index back
         tempList.pop();
         idx -= size;
       }
