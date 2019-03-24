@@ -16,18 +16,23 @@ var gameOfLife = function(board) {
   }
 
   let changes = [];
+  let directions = [
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, 1],
+    [0, -1],
+    [-1, 1],
+    [-1, 0],
+    [-1, -1],
+  ];
 
   for (let row = 0; row < board.length; row++) {
     for (let col = 0; col < board[0].length; col++) {
-      let n =
-        _checkNeighbor(row + 1, col + 1) +
-        _checkNeighbor(row + 1, col) +
-        _checkNeighbor(row + 1, col - 1) +
-        _checkNeighbor(row, col + 1) +
-        _checkNeighbor(row, col - 1) +
-        _checkNeighbor(row - 1, col + 1) +
-        _checkNeighbor(row - 1, col) +
-        _checkNeighbor(row - 1, col - 1);
+      let n = 0;
+      directions.forEach(
+        coord => (n += _checkNeighbor(row + coord[0], col + coord[1]))
+      );
       if (board[row][col] === 0) {
         if (n === 3) changes.push([row, col, 1]);
       } else if (board[row][col] === 1) {
