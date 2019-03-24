@@ -1,4 +1,4 @@
-const { insert, extractMax } = require("./heap");
+const { insert, extractMax } = require("./max-heap");
 
 describe("maxHeap", () => {
   it("should implement all functionality of max heaps", () => {
