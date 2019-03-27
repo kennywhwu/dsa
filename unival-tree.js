@@ -38,4 +38,7 @@ function countUnival(node) {
   return subtrees[0];
 }
 
-module.exports = { isUnival, countUnival };
+module.exports = {
+  isUnival,
+  countUnival,
+};
