@@ -1,4 +1,4 @@
-// Given binary tree, return array of most frequent sum of subtress
+// Given binary tree, return array of most frequent sum of subtrees
 
 var findFrequentTreeSum = function(root) {
   let freq = {};
