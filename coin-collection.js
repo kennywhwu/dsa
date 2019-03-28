@@ -4,7 +4,16 @@ function coinCollectionDirection(grid) {
   function _traverse(map, grid, y, x, directions) {
     let coord = `${y}-${x}`;
     let value = grid[y][x];
-    console.log("coord", coord, "value", value, "map", map, 'directions',directions);
+    // console.log(
+    //   "coord",
+    //   coord,
+    //   "value",
+    //   value,
+    //   "map",
+    //   map,
+    //   "directions",
+    //   directions
+    // );
     if (map[coord]) {
       directions.push(map[coord].step);
       return map[coord].value;
@@ -37,29 +46,52 @@ function coinCollectionDirection(grid) {
   _traverse({}, grid, 0, 0, directions);
   return directions;
 }
+// function coinCollection(grid) {
+//   function _traverse(map, grid, y, x) {
+//     let coord = `${y}-${x}`;
+//     let value = grid[y][x];
+//     if (map[coord]) {
+//       return map[coord];
+//     }
+
+//     let right = 0,
+//       down = 0;
+//     if (y + 1 < grid.length) {
+//       down = _traverse(map, grid, y + 1, x);
+//     }
+//     if (x + 1 < grid[0].length) {
+//       right = _traverse(map, grid, y, x + 1);
+//     }
+
+//     value += Math.max(right, down);
+//     map[coord] = value;
+//     return value;
+//   }
+
+//   return _traverse({}, grid, 0, 0);
+// }
+
 function coinCollection(grid) {
-  function _traverse(map, grid, y, x) {
-    let coord = `${y}-${x}`;
-    let value = grid[y][x];
-    if (map[coord]) {
-      return map[coord];
+  let max = 0;
+
+  function _traverse(grid, y, x, coins) {
+    coins += grid[y][x];
+
+    if (y === grid.length - 1 && x === grid[0].length - 1) {
+      max = Math.max(max, coins);
+      return max;
     }
 
-    let right = 0,
-      down = 0;
     if (y + 1 < grid.length) {
-      down = _traverse(map, grid, y + 1, x);
+      _traverse(grid, y + 1, x, coins);
     }
     if (x + 1 < grid[0].length) {
-      right = _traverse(map, grid, y, x + 1);
+      _traverse(grid, y, x + 1, coins);
     }
-
-    value += Math.max(right, down);
-    map[coord] = value;
-    return value;
   }
 
-  return _traverse({}, grid, 0, 0);
+  _traverse(grid, 0, 0, 0);
+  return max;
 }
 
 module.exports = { coinCollection, coinCollectionDirection };
