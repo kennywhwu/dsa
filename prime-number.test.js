@@ -1,4 +1,4 @@
-const { isPrime, primeFactors } = require("./prime-number");
+const { isPrime, primeFactors, sumPrime } = require("./prime-number");
 
 describe("isPrime", () => {
   it("should return true if number is prime", () => {
@@ -22,5 +22,20 @@ describe("primeFactors", () => {
     expect(primeFactors(6)).toEqual([2, 3]);
     expect(primeFactors(9)).toEqual([3, 3]);
     expect(primeFactors(12)).toEqual([2, 2, 3]);
+  });
+});
+describe("sumPrime", () => {
+  it("should return list of prime factors for number", () => {
+    expect(sumPrime(2)).toEqual(false);
+    expect(sumPrime(3)).toEqual(false);
+    expect(sumPrime(4)).toEqual(true);
+    expect(sumPrime(5)).toEqual(true);
+    expect(sumPrime(5)).toEqual(true);
+    expect(sumPrime(7)).toEqual(true);
+    expect(sumPrime(8)).toEqual(true);
+    expect(sumPrime(9)).toEqual(true);
+    expect(sumPrime(10)).toEqual(true);
+    expect(sumPrime(11)).toEqual(false);
+    expect(sumPrime(12)).toEqual(true);
   });
 });

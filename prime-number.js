@@ -30,4 +30,14 @@ function primeFactors(n) {
   return factors;
 }
 
-module.exports = { isPrime, primeFactors };
+function sumPrime(n) {
+  let ref = [];
+  for (let i = 2; i < n - 1; i++) {
+    if (isPrime(i) === true && isPrime(n - i)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = { isPrime, primeFactors, sumPrime };
