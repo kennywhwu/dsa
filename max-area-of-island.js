@@ -8,9 +8,11 @@ function maxAreaOfIsland(grid) {
   
   for(let row = 0; row < grid.length; row++){
       for(let col = 0; col < grid[0].length; col++){
-          count = 0
-          _traverse(row,col,grid)
-          max = Math.max(max,count)
+        if(grid[row][col]===1) {
+            count = 0
+            _traverse(row,col,grid)
+            max = Math.max(max,count)
+        }
       }
   }
   
