@@ -17,12 +17,10 @@ var combinationSum = function(candidates, target) {
         if (i > 0 && candidates[i] === candidates[i - 1]) continue;
         // push number to tempList and add to sum
         tempList.push(candidates[i]);
-        sum += candidates[i];
         // call helper on tempList and sum
-        _backtrack(tempList, sum, i);
+        _backtrack(tempList, sum + candidates[i], i);
         // pop number from tempList and subtract from sum
         tempList.pop();
-        sum -= candidates[i];
       }
     }
   }

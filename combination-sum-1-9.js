@@ -16,12 +16,10 @@ var combinationSum3 = function(k, n) {
       for (let i = start; i <= 9; i++) {
         // push number to tempList and add to sum
         tempList.push(i);
-        sum += i;
         // call helper with tempList, sum, and i+1
-        _backtrack(tempList, sum, i + 1);
+        _backtrack(tempList, sum + i, i + 1);
         // pop number from tempList and subtract from sum
         tempList.pop();
-        sum -= i;
       }
     }
   }
