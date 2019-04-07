@@ -3,7 +3,6 @@
 // https://leetcode.com/problems/pour-water
 
 function pourWater(h, V, K) {
-  let flag = "left";
   for (let i = 0; i < V; i++) {
     let p = K;
     for (let j = K - 1; j >= 0; j--) {
